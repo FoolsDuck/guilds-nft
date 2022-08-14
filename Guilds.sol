@@ -52,8 +52,6 @@ contract Guilds is ERC1155Supply, UseStrings {
     mapping(uint256 => mapping(address => uint256)) public ModMintLimit;
     mapping(uint256 => address) public tokenAdmin;
 
-    uint256 public maxSpots;
-
     function initialize() public virtual initializer {
         _transferOwnership(_msgSender());
         name = "Guilds";
@@ -63,7 +61,6 @@ contract Guilds is ERC1155Supply, UseStrings {
         deployerOne = 0x76e763f6Ff933fDFBAe0a51DDc9740B47048CcDA;
         deployerTwo = 0xd04FCf03971aC82fC9eAacB2BBdc863479ea134b;
         minimumMintRate = 0;
-        maxSpots = 100;
     }
 
     // PUBLIC READ FUNCTIONS:
@@ -389,7 +386,6 @@ contract Guilds is ERC1155Supply, UseStrings {
             msg.value >= (_amount * minimumMintRate),
             "Not enough ethers sent"
         );
-        require(_amount <= maxSpots, "Too many spots");
         uint256 _id = totalGuilds() + 1;
         _totalGuilds = _id;
         _grantAdminRole(ADMIN, msg.sender, _id);
@@ -498,10 +494,6 @@ contract Guilds is ERC1155Supply, UseStrings {
     }
 
     // Owners:
-
-    function setMaxSpots(uint256 _amount) external onlyOwner {
-        maxSpots = _amount;
-    }
 
     function setMinimumMintRate(uint256 _mintRate) external onlyOwner {
         minimumMintRate = _mintRate;
